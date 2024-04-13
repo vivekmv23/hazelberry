@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-const valid string = `
+const validAuthString string = `
 {
 	"type": "basic",
 	"basic": [
@@ -26,18 +26,18 @@ const valid string = `
 `
 
 func TestAuth_valid(t *testing.T) {
-	dataReader := strings.NewReader(valid)
+	dataReader := strings.NewReader(validAuthString)
 	decoder := json.NewDecoder(dataReader)
 	var validAuth Auth
 	err := decoder.Decode(&validAuth)
-	testutils.FatalIfMsg(testutils.NoError(err), t)
+	testutils.FatalIfError(err, t)
 	err = validAuth.InitAndValidate()
-	testutils.FatalIfMsg(testutils.NoError(err), t)
-	testutils.FatalIfMsg(testutils.Equals(validAuth.getId(), "some-username"), t)
-	testutils.FatalIfMsg(testutils.Equals(validAuth.getPass(), "some-password"), t)
+	testutils.FatalIfError(err, t)
+	testutils.FatalIfNotEquals(validAuth.getKey(), "some-username", t)
+	testutils.FatalIfNotEquals(validAuth.getValue(), "some-password", t)
 }
 
-const invalids string = `
+const invalidAuthListString string = `
 [
 	{
 		"type": "unsupported",
@@ -89,11 +89,10 @@ const invalids string = `
 
 func TestAuth_invalids(t *testing.T) {
 	var invalidAuths []Auth
-	dataReader := strings.NewReader(invalids)
+	dataReader := strings.NewReader(invalidAuthListString)
 	decoder := json.NewDecoder(dataReader)
-	testutils.FatalIfMsg(testutils.NoError(decoder.Decode(&invalidAuths)), t)
+	testutils.FatalIfError(decoder.Decode(&invalidAuths), t)
 	for _, invalidAuth := range invalidAuths {
-		err := invalidAuth.InitAndValidate()
-		testutils.FatalIfMsg(testutils.HasError(err), t)
+		testutils.FatalIfNoError(invalidAuth.InitAndValidate(), t)
 	}
 }
