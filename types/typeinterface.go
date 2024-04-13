@@ -4,7 +4,7 @@ type Type interface {
 	InitAndValidate() error
 }
 
-type Credentials interface {
-	getId() string
-	getPass() string
+type KeyValue interface {
+	getKey() string
+	getValue() string
 }

@@ -1,47 +1,35 @@
 package utils
 
 import (
-	"fmt"
 	"testing"
 )
 
-func Equals(expected string, result string) (msg string) {
-	if expected != result {
-		return fmt.Sprintf("Expected \"%s\" but got \"%s\"\n", expected, result)
-	}
-	return ""
-}
-
-func NoError(err error) (msg string) {
+func FatalIfError(err error, t *testing.T) {
 	if err != nil {
-		return fmt.Sprintf("Expected no error but got: %v", err)
+		t.Fatal(err)
 	}
-	return ""
 }
 
-func HasError(err error) (msg string) {
+func FatalIfNoError(err error, t *testing.T) {
 	if err == nil {
-		return "Expected some error but got none"
+		t.Fatal("Expected some error but got none")
 	}
-	return ""
 }
 
-func IsTrue(key string, val bool) (msg string) {
-	if !val {
-		return fmt.Sprintf("Expected %s to be true, but is false\n", key)
-	}
-	return ""
-}
-
-func IsFalse(key string, val bool) (msg string) {
+func FatalIfTrue(key string, val bool, t *testing.T) {
 	if val {
-		return fmt.Sprintf("Expected %s to be false, but is true\n", key)
+		t.Fatalf("Expected %s to be true, but is false\n", key)
 	}
-	return ""
 }
 
-func FatalIfMsg(msg string, t *testing.T) {
-	if msg != "" {
-		t.Fatal(msg)
+func FatalIfFalse(key string, val bool, t *testing.T) {
+	if !val {
+		t.Fatalf("Expected %s to be false, but is true\n", key)
+	}
+}
+
+func FatalIfNotEquals(expected string, result string, t *testing.T) {
+	if expected != result {
+		t.Fatalf("Expected \"%s\" but got \"%s\"\n", expected, result)
 	}
 }
