@@ -47,10 +47,10 @@ func initAndValidateBasicAuthAttr(ba *Auth) error {
 	return nil
 }
 
-func (a *Auth) getKey() string {
+func (a *Auth) getId() string {
 	return a.creds["username"]
 }
 
-func (a *Auth) getValue() string {
+func (a *Auth) getPass() string {
 	return a.creds["password"]
 }
