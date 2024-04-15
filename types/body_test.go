@@ -2,7 +2,7 @@ package types
 
 import (
 	"encoding/json"
-	testingutils "hazelberry/utils"
+	testingutils "github.com/vivekmv23/hazelberry/utils"
 	"strings"
 	"testing"
 )
