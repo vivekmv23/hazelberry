@@ -2,7 +2,7 @@ package types
 
 import (
 	"encoding/json"
-	testutils "hazelberry/utils"
+	testutils "github.com/vivekmv23/hazelberry/utils"
 	"strings"
 	"testing"
 )
@@ -79,6 +79,7 @@ var invalidUrlsString string = `
   }
 ]
 `
+
 func TestUrl_invalid(t *testing.T) {
 	reader := strings.NewReader(invalidUrlsString)
 	decoder := json.NewDecoder(reader)
