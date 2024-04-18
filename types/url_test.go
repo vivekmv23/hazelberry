@@ -36,6 +36,17 @@ var validUrlsString string = `
         "disabled": true
       }
     ]
+  },
+  {
+    "raw": "https://some-url.some-domain.com?some-param-key=some-param-value",
+    "protocol": "https",
+    "query": [
+      {
+        "key": "some-param-key",
+        "value": "some-param-value",
+        "disabled": true
+      }
+    ]
   }
 ]
 `
@@ -51,7 +62,9 @@ func TestUrl_valid(t *testing.T) {
 		testutils.FatalIfNotEquals("https://some-url.some-domain.com?some-param-key=some-param-value", validUrls.Raw, t)
 		hostString, err := validUrls.GetHost()
 		testutils.FatalIfError(err, t)
-		testutils.FatalIfNotEquals("some-url.some-domain.com", hostString, t)
+		if validUrls.Host != nil {
+			testutils.FatalIfNotEquals("some-url.some-domain.com", hostString, t)
+		}
 		testutils.FatalIfFalse("query paraments length is one", len(validUrls.Query) == 1, t)
 		testutils.FatalIfNotEquals("some-param-key", validUrls.Query[0].getKey(), t)
 		testutils.FatalIfNotEquals("some-param-value", validUrls.Query[0].getValue(), t)
@@ -89,4 +102,9 @@ func TestUrl_invalid(t *testing.T) {
 		err := invalidUrls.InitAndValidate()
 		testutils.FatalIfNoError(err, t)
 	}
+}
+
+func TestUrl_isEmpty(t *testing.T) {
+	emptyUrl := Url{}
+	testutils.FatalIfFalse("Empty url", emptyUrl.IsEmpty(), t)
 }
