@@ -33,6 +33,10 @@ func (u *Url) InitAndValidate() error {
 	return nil
 }
 
+func (u *Url) IsEmpty() bool {
+	return u.Raw == ""
+}
+
 // gets the host string if not already set in hostString
 func (u *Url) GetHost() (string, error) {
 	if u.hostString != "" {
@@ -40,6 +44,8 @@ func (u *Url) GetHost() (string, error) {
 	}
 	// type determination to support string || []string
 	switch u.Host.(type) {
+	case nil:
+		return "", nil
 	case string:
 		return u.Host.(string), nil
 	case []interface{}:

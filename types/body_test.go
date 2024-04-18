@@ -45,3 +45,8 @@ func TestBody_invalid(t *testing.T) {
 	}
 
 }
+
+func TestBody_isEmpty(t *testing.T) {
+	emptyBody := Body{}
+	testingutils.FatalIfFalse("Empty body", emptyBody.IsEmpty(), t)
+}

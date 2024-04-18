@@ -96,3 +96,10 @@ func TestAuth_invalids(t *testing.T) {
 		testutils.FatalIfNoError(invalidAuth.InitAndValidate(), t)
 	}
 }
+
+func TestAuth_isEmpty(t *testing.T) {
+	emptyAuth := Auth{}
+	testutils.FatalIfFalse("Empty auth", emptyAuth.IsEmpty(), t)
+	noBasicAuth := Auth{Basic: []AuthAttr{{Key: "passs"}}}
+	testutils.FatalIfTrue("Empty auth", noBasicAuth.IsEmpty(), t)
+}

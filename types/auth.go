@@ -2,7 +2,7 @@ package types
 
 import "fmt"
 
-// Auth Types
+// Auth Types Supported
 const (
 	BASIC = "basic"
 )
@@ -29,6 +29,10 @@ func (a *Auth) InitAndValidate() error {
 		return fmt.Errorf("auth type is invalid or not yet supported")
 	}
 
+}
+
+func (a *Auth) IsEmpty() bool {
+	return a.Type == "" && len(a.Basic) == 0
 }
 
 func initAndValidateBasicAuthAttr(ba *Auth) error {

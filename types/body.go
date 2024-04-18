@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Body Modes
+// Body Modes Supported
 const (
 	RAW = "raw"
 )
@@ -24,4 +24,8 @@ func (b *Body) InitAndValidate() error {
 	default:
 		return fmt.Errorf("body.mode %s is invalid or not yet supported", b.Mode)
 	}
+}
+
+func (b *Body) IsEmpty() bool {
+	return b.Mode == ""
 }
