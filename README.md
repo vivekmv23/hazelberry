@@ -9,7 +9,7 @@ Command line utility for testing REST APIs and organizing them leveraging [colle
 
 
 ## Unsupported 
-### Types
+### 1. Types
 1. Header of type string is not supported
 2. Http methods: ["COPY","LINK","UNLINK","PURGE","LOCK","UNLOCK","PROPFIND","VIEW"]
 3. Body types: ["urlencoded","formdata","file","graphql"]
