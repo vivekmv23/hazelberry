@@ -14,4 +14,11 @@ Command line utility for testing REST APIs and organizing them leveraging [colle
 2. Http methods: ["COPY","LINK","UNLINK","PURGE","LOCK","UNLOCK","PROPFIND","VIEW"]
 3. Body types: ["urlencoded","formdata","file","graphql"]
 4. Request Certificates
-5. Request Proxy
+5. Request Proxies
+6. Request Cookies
+7. Scripts
+8. Variables
+9. Descriptions
+10. Responses
+11. Events
+12. Request of type string
