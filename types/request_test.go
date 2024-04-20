@@ -74,6 +74,7 @@ func TestRequest_valid(t *testing.T) {
 		err := validReq.InitAndValidate()
 		testingutils.FatalIfError(err, t)
 		testingutils.FatalIfNotEquals(http.MethodGet, validReq.Method, t)
+		testingutils.FatalIfTrue("request is not empty", validReq.IsEmpty(), t)
 		// Other items have been asserted in their own individual tests
 	}
 
@@ -128,4 +129,9 @@ func TestRequest_invalids(t *testing.T) {
 		err := invalidRequest.InitAndValidate()
 		testingutils.FatalIfNoError(err, t)
 	}
+}
+
+func TestRequest_isEmpty(t *testing.T) {
+	r := Request{}
+	testingutils.FatalIfFalse("request is empty", r.IsEmpty(), t)
 }

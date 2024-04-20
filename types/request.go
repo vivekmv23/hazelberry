@@ -54,6 +54,10 @@ func (r *Request) InitAndValidate() error {
 	return nil
 }
 
+func (r *Request) IsEmpty() bool {
+	return r.Method == ""
+}
+
 func checkAndValidate(tp Type) error {
 	if tp.IsEmpty() {
 		return nil
