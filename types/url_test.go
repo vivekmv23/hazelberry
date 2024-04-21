@@ -83,8 +83,10 @@ var invalidUrlsString string = `
     "host": "some-url.some-domain.com",
     "query": [
       {
+        "key" : "some-param-key",
         "value": "some-param-value"
-      }
+      },
+      {}
     ]
   }
 ]

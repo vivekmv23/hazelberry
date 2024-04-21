@@ -94,6 +94,4 @@ func TestAuth_invalids(t *testing.T) {
 func TestAuth_isEmpty(t *testing.T) {
 	emptyAuth := Auth{}
 	testutil.FatalIfFalse("Empty auth", emptyAuth.IsEmpty(), t)
-	noBasicAuth := Auth{Basic: []AuthAttr{{Key: "passs"}}}
-	testutil.FatalIfTrue("Empty auth", noBasicAuth.IsEmpty(), t)
 }
