@@ -1,11 +1,9 @@
 package types
 
 import (
-	"encoding/json"
-	"strings"
 	"testing"
 
-	testingutil "github.com/vivekmv23/hazelberry/utils"
+	"github.com/vivekmv23/hazelberry/testutil"
 )
 
 var validCollectionString string = `
@@ -71,22 +69,20 @@ var validCollectionString string = `
 `
 
 func TestCollection_valids(t *testing.T) {
-	reader := strings.NewReader(validCollectionString)
-	decoder := json.NewDecoder(reader)
 	var c []Collection
-	testingutil.FatalIfError(decoder.Decode(&c), t)
+	testutil.Decode(validCollectionString, &c, t)
 	for _, validCollection := range c {
 		err := validCollection.InitAndValidate()
-		testingutil.FatalIfError(err, t)
-		testingutil.FatalIfNotEquals("some-name", validCollection.Info.Name, t)
+		testutil.FatalIfError(err, t)
+		testutil.FatalIfNotEquals("some-name", validCollection.Info.Name, t)
 		for _, item := range validCollection.Item {
-			testingutil.FatalIfNotEquals("https://some-url.com", item.Request.Url.Raw, t)
+			testutil.FatalIfNotEquals("https://some-url.com", item.Request.Url.Raw, t)
 		}
 		if !validCollection.Auth.IsEmpty() {
-			testingutil.FatalIfNotEquals("some-username", validCollection.Auth.getId(), t)
-			testingutil.FatalIfNotEquals("some-password", validCollection.Auth.getPass(), t)
+			testutil.FatalIfNotEquals("some-username", validCollection.Auth.getId(), t)
+			testutil.FatalIfNotEquals("some-password", validCollection.Auth.getPass(), t)
 		}
-		testingutil.FatalIfTrue("collection is empty", validCollection.IsEmpty(), t)
+		testutil.FatalIfTrue("collection is empty", validCollection.IsEmpty(), t)
 	}
 }
 
@@ -146,11 +142,9 @@ var invalidCollectionsString string = `
 `
 
 func TestCollection_invalids(t *testing.T) {
-	reader := strings.NewReader(invalidCollectionsString)
-	decoder := json.NewDecoder(reader)
 	var c []Collection
-	testingutil.FatalIfError(decoder.Decode(&c), t)
+	testutil.Decode(invalidCollectionsString, &c, t)
 	for _, invalidCollection := range c {
-		testingutil.FatalIfNoError(invalidCollection.InitAndValidate(), t)
+		testutil.FatalIfNoError(invalidCollection.InitAndValidate(), t)
 	}
 }

@@ -1,10 +1,9 @@
 package types
 
 import (
-	"encoding/json"
-	testutils "github.com/vivekmv23/hazelberry/utils"
-	"strings"
 	"testing"
+
+	"github.com/vivekmv23/hazelberry/testutil"
 )
 
 const validAuthString string = `
@@ -26,15 +25,12 @@ const validAuthString string = `
 `
 
 func TestAuth_valid(t *testing.T) {
-	dataReader := strings.NewReader(validAuthString)
-	decoder := json.NewDecoder(dataReader)
 	var validAuth Auth
-	err := decoder.Decode(&validAuth)
-	testutils.FatalIfError(err, t)
-	err = validAuth.InitAndValidate()
-	testutils.FatalIfError(err, t)
-	testutils.FatalIfNotEquals(validAuth.getId(), "some-username", t)
-	testutils.FatalIfNotEquals(validAuth.getPass(), "some-password", t)
+	testutil.Decode(validAuthString, &validAuth, t)
+	err := validAuth.InitAndValidate()
+	testutil.FatalIfError(err, t)
+	testutil.FatalIfNotEquals(validAuth.getId(), "some-username", t)
+	testutil.FatalIfNotEquals(validAuth.getPass(), "some-password", t)
 }
 
 const invalidAuthListString string = `
@@ -89,17 +85,15 @@ const invalidAuthListString string = `
 
 func TestAuth_invalids(t *testing.T) {
 	var invalidAuths []Auth
-	dataReader := strings.NewReader(invalidAuthListString)
-	decoder := json.NewDecoder(dataReader)
-	testutils.FatalIfError(decoder.Decode(&invalidAuths), t)
+	testutil.Decode(invalidAuthListString, &invalidAuths, t)
 	for _, invalidAuth := range invalidAuths {
-		testutils.FatalIfNoError(invalidAuth.InitAndValidate(), t)
+		testutil.FatalIfNoError(invalidAuth.InitAndValidate(), t)
 	}
 }
 
 func TestAuth_isEmpty(t *testing.T) {
 	emptyAuth := Auth{}
-	testutils.FatalIfFalse("Empty auth", emptyAuth.IsEmpty(), t)
+	testutil.FatalIfFalse("Empty auth", emptyAuth.IsEmpty(), t)
 	noBasicAuth := Auth{Basic: []AuthAttr{{Key: "passs"}}}
-	testutils.FatalIfTrue("Empty auth", noBasicAuth.IsEmpty(), t)
+	testutil.FatalIfTrue("Empty auth", noBasicAuth.IsEmpty(), t)
 }

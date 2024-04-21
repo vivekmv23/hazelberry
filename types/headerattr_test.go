@@ -1,10 +1,9 @@
 package types
 
 import (
-	"encoding/json"
-	testutils "github.com/vivekmv23/hazelberry/utils"
-	"strings"
 	"testing"
+
+	"github.com/vivekmv23/hazelberry/testutil"
 )
 
 const validHeaderString string = `
@@ -18,22 +17,17 @@ const validHeaderString string = `
 `
 
 func TestHeaderAttr_valid(t *testing.T) {
-	dataReader := strings.NewReader(validHeaderString)
-	decoder := json.NewDecoder(dataReader)
 	var validHeader HeaderAttr
-	err := decoder.Decode(&validHeader)
-	testutils.FatalIfError(err, t)
-	err = validHeader.InitAndValidate()
-	testutils.FatalIfError(err, t)
-	testutils.FatalIfNotEquals(validHeader.getKey(), "Content-Type", t)
-	testutils.FatalIfNotEquals(validHeader.getValue(), "application/json", t)
+	testutil.Decode(validHeaderString, &validHeader, t)
+	err := validHeader.InitAndValidate()
+	testutil.FatalIfError(err, t)
+	testutil.FatalIfNotEquals(validHeader.getKey(), "Content-Type", t)
+	testutil.FatalIfNotEquals(validHeader.getValue(), "application/json", t)
 }
 
 const invalidHeaderAttrsString string = `
 [
-	{
-
-	},
+	{},
 	{
 		"value": "application/json"
 	}
@@ -41,11 +35,9 @@ const invalidHeaderAttrsString string = `
 `
 
 func TestHeaderAttr_invalids(t *testing.T) {
-	var invalidHeaderAttrs []HeaderAttr
-	dataReader := strings.NewReader(invalidHeaderAttrsString)
-	decoder := json.NewDecoder(dataReader)
-	testutils.FatalIfError(decoder.Decode(&invalidHeaderAttrs), t)
-	for _, invalidHeaderAttr := range invalidHeaderAttrs {
-		testutils.FatalIfNoError(invalidHeaderAttr.InitAndValidate(), t)
+	var ha []HeaderAttr
+	testutil.Decode(invalidHeaderAttrsString, &ha, t)
+	for _, invalidHeaderAttr := range ha {
+		testutil.FatalIfNoError(invalidHeaderAttr.InitAndValidate(), t)
 	}
 }
