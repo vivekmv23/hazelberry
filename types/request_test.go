@@ -1,12 +1,10 @@
 package types
 
 import (
-	"encoding/json"
 	"net/http"
-	"strings"
 	"testing"
 
-	testingutils "github.com/vivekmv23/hazelberry/utils"
+	"github.com/vivekmv23/hazelberry/testutil"
 )
 
 var validRequestString string = `
@@ -66,15 +64,13 @@ var validRequestString string = `
 `
 
 func TestRequest_valid(t *testing.T) {
-	reader := strings.NewReader(validRequestString)
-	decoder := json.NewDecoder(reader)
 	var r []Request
-	testingutils.FatalIfError(decoder.Decode(&r), t)
+	testutil.Decode(validRequestString, &r, t)
 	for _, validReq := range r {
 		err := validReq.InitAndValidate()
-		testingutils.FatalIfError(err, t)
-		testingutils.FatalIfNotEquals(http.MethodGet, validReq.Method, t)
-		testingutils.FatalIfTrue("request is not empty", validReq.IsEmpty(), t)
+		testutil.FatalIfError(err, t)
+		testutil.FatalIfNotEquals(http.MethodGet, validReq.Method, t)
+		testutil.FatalIfTrue("request is not empty", validReq.IsEmpty(), t)
 		// Other items have been asserted in their own individual tests
 	}
 
@@ -124,18 +120,22 @@ var invalidRequestsString string = `
 `
 
 func TestRequest_invalids(t *testing.T) {
-	reader := strings.NewReader(invalidRequestsString)
-	decoder := json.NewDecoder(reader)
 	var r []Request
-	err := decoder.Decode(&r)
-	testingutils.FatalIfError(err, t)
+	testutil.Decode(invalidRequestsString, &r, t)
 	for _, invalidRequest := range r {
 		err := invalidRequest.InitAndValidate()
-		testingutils.FatalIfNoError(err, t)
+		testutil.FatalIfNoError(err, t)
 	}
 }
 
 func TestRequest_isEmpty(t *testing.T) {
 	r := Request{}
-	testingutils.FatalIfFalse("request is empty", r.IsEmpty(), t)
+	testutil.FatalIfFalse("request is empty", r.IsEmpty(), t)
+}
+
+func TestRequest_urlParserError(t *testing.T) {
+	req := Request{
+		UrlParsed: make(chan int),
+	}
+	testutil.FatalIfNoError(ConvertParsedUrl(&req), t)
 }
