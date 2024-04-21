@@ -4,7 +4,8 @@ import "fmt"
 
 // Auth Types Supported
 const (
-	BASIC = "basic"
+	BASIC   = "basic"
+	NO_AUTH = "noauth"
 )
 
 type AuthAttr struct {
@@ -27,6 +28,8 @@ func (a *Auth) InitAndValidate() error {
 		if err := initAndValidateBasicAuthAttr(a); err != nil {
 			return fmt.Errorf("basic auth has error: %s", err)
 		}
+	case NO_AUTH:
+		return nil // requires no specific validation
 	default:
 		return fmt.Errorf("auth type \"%s\" is invalid/unsupported", a.Type)
 	}
@@ -34,7 +37,7 @@ func (a *Auth) InitAndValidate() error {
 }
 
 func (a *Auth) IsEmpty() bool {
-	return a.Type == ""
+	return a.Type == "" || a.Type == NO_AUTH
 }
 
 func initAndValidateBasicAuthAttr(ba *Auth) error {

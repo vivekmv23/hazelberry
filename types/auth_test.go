@@ -91,7 +91,16 @@ func TestAuth_invalids(t *testing.T) {
 	}
 }
 
+var noauthAuthString = `
+{
+	"type": "noauth"
+}
+`
+
 func TestAuth_isEmpty(t *testing.T) {
-	emptyAuth := Auth{}
-	testutil.FatalIfFalse("Empty auth", emptyAuth.IsEmpty(), t)
+	a := Auth{}
+	testutil.FatalIfFalse("Empty auth", a.IsEmpty(), t)
+	testutil.Decode(noauthAuthString, &a, t)
+	testutil.FatalIfError(a.InitAndValidate(), t)
+	testutil.FatalIfFalse("Empty auth", a.IsEmpty(), t)
 }
