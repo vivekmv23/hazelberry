@@ -15,7 +15,10 @@ func (i *Item) InitAndValidate() error {
 	if i.Request.IsEmpty() {
 		return fmt.Errorf("item request is mandatory")
 	}
-	return i.Request.InitAndValidate()
+	if err := i.Request.InitAndValidate(); err != nil {
+		return fmt.Errorf("item requests has error:%s", err)
+	}
+	return nil
 
 }
 

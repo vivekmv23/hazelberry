@@ -14,7 +14,7 @@ var validItemString string = `
 	"id": "sample-id",
 	"request": {
 		"method": "GET",
-		"url": "https://some-url.some-domain.com?some-param-key=some-param-value"
+		"url": "https://some-url.com"
 	}
 }
 `
@@ -27,6 +27,11 @@ func TestItem_valid(t *testing.T) {
 	err := i.InitAndValidate()
 	testingutils.FatalIfError(err, t)
 	testingutils.FatalIfTrue("Item is empty", i.IsEmpty(), t)
+	testingutils.FatalIfNotEquals("sample-item", i.Name, t)
+	testingutils.FatalIfNotEquals("sample-id", i.Id, t)
+	testingutils.FatalIfNotEquals("https://some-url.com", i.Request.Url.Raw, t)
+	testingutils.FatalIfFalse("item request auth is empty", i.Request.Auth.IsEmpty(), t)
+	testingutils.FatalIfFalse("item request body is empty", i.Request.Body.IsEmpty(), t)
 }
 
 var invalidItemsString string = `
@@ -34,11 +39,18 @@ var invalidItemsString string = `
 	{
 		"request": {
 			"method": "GET",
-			"url": "https://some-url.some-domain.com?some-param-key=some-param-value"
+			"url": "https://some-url.com"
 		}
 	},
 	{
 		"name": "sample-item"
+	},
+	{
+		"name": "sample-item",
+		"request": {
+			"method": "UNSUPPORTED",
+			"url": "https://some-url.com"
+		}
 	}
 ]
 `

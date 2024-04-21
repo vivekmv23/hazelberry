@@ -25,11 +25,15 @@ func (u *Url) InitAndValidate() error {
 	}
 	// set the determined hostString for later use
 	u.hostString = hostString
-	for _, qp := range u.Query {
-		if err := qp.InitAndValidate(); err != nil {
-			return err
+
+	if len(u.Query) > 0 {
+		for i := range u.Query {
+			if err := u.Query[i].InitAndValidate(); err != nil {
+				return err
+			}
 		}
 	}
+
 	return nil
 }
 
