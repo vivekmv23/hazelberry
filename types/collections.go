@@ -14,19 +14,21 @@ func (c *Collection) InitAndValidate() error {
 		return fmt.Errorf("collection info has error: %s", err)
 	}
 
+	name := c.Info.Name
+
 	if len(c.Item) == 0 {
-		return fmt.Errorf("collection item is mandatory")
+		return fmt.Errorf("%s collection has no item", name)
 	}
 
 	for i := range c.Item {
 		if err := c.Item[i].InitAndValidate(); err != nil {
-			return fmt.Errorf("collection item at %d has error: %s", i, err)
+			return fmt.Errorf("%s collection's item at %d has error: %s", name, i+1, err)
 		}
 	}
 
 	if !c.Auth.IsEmpty() {
 		if err := c.Auth.InitAndValidate(); err != nil {
-			return fmt.Errorf("collection auth has error: %s", err)
+			return fmt.Errorf("%s collection's auth has error: %s", name, err)
 		}
 	}
 

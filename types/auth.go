@@ -20,33 +20,34 @@ type Auth struct {
 
 func (a *Auth) InitAndValidate() error {
 	if isValid := (a.Type != ""); !isValid {
-		return fmt.Errorf("field auth.type is mandatory")
+		return fmt.Errorf("auth type is mandatory")
 	}
 	switch a.Type {
 	case BASIC:
-		return initAndValidateBasicAuthAttr(a)
+		if err := initAndValidateBasicAuthAttr(a); err != nil {
+			return fmt.Errorf("basic auth has error: %s", err)
+		}
 	default:
-		return fmt.Errorf("auth type is invalid or not yet supported")
+		return fmt.Errorf("auth type \"%s\" is invalid/unsupported", a.Type)
 	}
-
+	return nil
 }
 
 func (a *Auth) IsEmpty() bool {
-	return a.Type == "" && len(a.Basic) == 0
+	return a.Type == ""
 }
 
 func initAndValidateBasicAuthAttr(ba *Auth) error {
-	isValid := (len(ba.Basic) == 2)
-	if !isValid {
-		return fmt.Errorf("values username & password are mandatory for basic authentication")
+	if len(ba.Basic) < 2 {
+		return fmt.Errorf("values username & password are mandatory")
 	}
 	ba.creds = map[string]string{
 		ba.Basic[0].Key: ba.Basic[0].Value,
 		ba.Basic[1].Key: ba.Basic[1].Value,
 	}
-	isValid = isValid && (ba.creds["username"] != "") && (ba.creds["password"] != "")
-	if !isValid {
-		return fmt.Errorf("values username & password are mandatory for basic authentication")
+
+	if ba.creds["username"] == "" || ba.creds["password"] == "" {
+		return fmt.Errorf("values username & password are mandatory")
 	}
 	return nil
 }

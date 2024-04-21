@@ -17,11 +17,11 @@ type Url struct {
 func (u *Url) InitAndValidate() error {
 	// raw might not be mandatory as per schema
 	if u.Raw == "" {
-		return fmt.Errorf("url.raw cannot be empty")
+		return fmt.Errorf("url raw is mandatory")
 	}
 	hostString, err := u.GetHost()
 	if err != nil {
-		return err
+		return fmt.Errorf("url host has error: %s", err)
 	}
 	// set the determined hostString for later use
 	u.hostString = hostString
@@ -29,7 +29,7 @@ func (u *Url) InitAndValidate() error {
 	if len(u.Query) > 0 {
 		for i := range u.Query {
 			if err := u.Query[i].InitAndValidate(); err != nil {
-				return err
+				return fmt.Errorf("url query at %d has error: %s", i+1, err)
 			}
 		}
 	}
@@ -58,7 +58,7 @@ func (u *Url) GetHost() (string, error) {
 		}
 		return strings.TrimSuffix(u.hostString, "."), nil
 	default:
-		return "", fmt.Errorf("url.host cannot be of type %T", u.Host)
+		return "", fmt.Errorf("url host cannot be of type %T", u.Host)
 	}
 
 }

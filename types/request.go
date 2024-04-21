@@ -28,26 +28,26 @@ type Request struct {
 func (r *Request) InitAndValidate() error {
 
 	if err := checkAndValidateUrl(r); err != nil {
-		return err
+		return fmt.Errorf("request url has error: %s", err)
 	}
 
 	if err := checkAndValidateMethod(r.Method); err != nil {
-		return err
+		return fmt.Errorf("request method has error: %s", err)
 	}
 
 	if err := checkAndValidate(&r.Auth); err != nil {
-		return err
+		return fmt.Errorf("request auth has error: %s", err)
 	}
 
 	if err := checkAndValidate(&r.Body); err != nil {
-		return err
+		return fmt.Errorf("request body has error: %s", err)
 
 	}
 
 	if len(r.Header) > 0 {
 		for i := range r.Header {
 			if err := r.Header[i].InitAndValidate(); err != nil {
-				return err
+				return fmt.Errorf("request header at %d has error: %s", i+1, err)
 			}
 		}
 	}
@@ -68,7 +68,7 @@ func checkAndValidate(tp Type) error {
 
 func checkAndValidateUrl(r *Request) error {
 	if r.UrlParsed == nil {
-		return fmt.Errorf("request url is mandatory")
+		return fmt.Errorf("url is mandatory")
 	}
 	if err := ConvertParsedUrl(r); err != nil {
 		return err
@@ -86,7 +86,7 @@ func checkAndValidateMethod(method string) error {
 	}
 
 	if !isSupportedMethod {
-		return fmt.Errorf("http method %s is not supported", method)
+		return fmt.Errorf("http method \"%s\" is invalid/unsupported", method)
 	}
 	return nil
 }
