@@ -1,7 +1,6 @@
 package types
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -45,9 +44,11 @@ func (r *Request) InitAndValidate() error {
 
 	}
 
-	for _, header := range r.Header {
-		if err := header.InitAndValidate(); err != nil {
-			return err
+	if len(r.Header) > 0 {
+		for i := range r.Header {
+			if err := r.Header[i].InitAndValidate(); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -67,22 +68,12 @@ func checkAndValidate(tp Type) error {
 
 func checkAndValidateUrl(r *Request) error {
 	if r.UrlParsed == nil {
-		return fmt.Errorf("Url is mandatory")
+		return fmt.Errorf("request url is mandatory")
 	}
-	switch r.UrlParsed.(type) {
-	case string:
-		r.Url = Url{Raw: r.UrlParsed.(string)}
-		return nil
-	default:
-		mar, err := json.Marshal(r.UrlParsed)
-		if err != nil {
-			return err
-		}
-		if err := json.Unmarshal(mar, &r.Url); err != nil {
-			return err
-		}
-		return checkAndValidate(&r.Url)
+	if err := ConvertParsedUrl(r); err != nil {
+		return err
 	}
+	return checkAndValidate(&r.Url)
 }
 
 func checkAndValidateMethod(method string) error {

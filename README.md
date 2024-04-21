@@ -22,3 +22,4 @@ Command line utility for testing REST APIs and organizing them leveraging [colle
 10. Responses
 11. Events
 12. Request of type string
+13. Item Group

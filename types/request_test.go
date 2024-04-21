@@ -115,6 +115,10 @@ var invalidRequestsString string = `
 				"value": "some-header-value"
 			}
 		]
+	},
+	{
+		"url": 123445,
+		"method": "UNSUPPORTED"
 	}
 ]
 `
