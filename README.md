@@ -12,12 +12,12 @@ Command line utility for testing REST APIs and organizing them leveraging [colle
 - Http methods: ["COPY","LINK","UNLINK","PURGE","LOCK","UNLOCK","PROPFIND","VIEW"]
 - Body types: ["urlencoded","formdata","file","graphql"]
 - Auth types: [ "apikey", "awsv4", "bearer", "digest", "edgegrid", "hawk", "ntlm", "oauth1", "oauth2"]
+- Variable value types: ["boolean","any","number"]
 - Request Certificates
 - Request Proxies
 - Request Cookies
 - Header of type string is not supported
 - Scripts
-- Variables
 - Descriptions
 - Responses
 - Events

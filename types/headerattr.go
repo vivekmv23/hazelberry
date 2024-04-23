@@ -12,15 +12,19 @@ func (ha *HeaderAttr) InitAndValidate() error {
 	// Values are also mandatory as per schema
 	// Ignoring the validations to support empty string values
 	if ha.Key == "" {
-		return fmt.Errorf("header key is mandatory")
+		return fmt.Errorf("key is mandatory")
 	}
 	return nil
 }
 
-func (ha *HeaderAttr) getKey() string {
+func (ha *HeaderAttr) GetKey() string {
 	return ha.Key
 }
 
-func (ha *HeaderAttr) getValue() string {
+func (ha *HeaderAttr) GetValue() string {
 	return ha.Value
+}
+
+func (ha *HeaderAttr) IsDisabled() bool {
+	return ha.Disabled
 }

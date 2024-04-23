@@ -64,6 +64,27 @@ var validCollectionString string = `
 			}
 		]
 
+	},
+	{
+		"info": {
+			"name": "some-name"
+		},
+		"item": [
+			{
+				"name": "sample-item",
+				"id": "sample-id",
+				"request": {
+					"method": "GET",
+					"url": "https://some-url.com"
+				}
+			}
+		],
+		"variable": [
+			{
+				"key": "some-var-key",
+				"value": "some-var-value"
+			}
+    	]
 	}
 ]
 `
@@ -78,9 +99,13 @@ func TestCollection_valids(t *testing.T) {
 		for _, item := range validCollection.Item {
 			testutil.FatalIfNotEquals("https://some-url.com", item.Request.Url.Raw, t)
 		}
+		for _, varaible := range validCollection.Varaible {
+			testutil.FatalIfNotEquals("some-var-key", varaible.GetKey(), t)
+			testutil.FatalIfNotEquals("some-var-value", varaible.GetValue(), t)
+		}
 		if !validCollection.Auth.IsEmpty() {
-			testutil.FatalIfNotEquals("some-username", validCollection.Auth.getId(), t)
-			testutil.FatalIfNotEquals("some-password", validCollection.Auth.getPass(), t)
+			testutil.FatalIfNotEquals("some-username", validCollection.Auth.GetId(), t)
+			testutil.FatalIfNotEquals("some-password", validCollection.Auth.GetPass(), t)
 		}
 		testutil.FatalIfTrue("collection is empty", validCollection.IsEmpty(), t)
 	}
@@ -112,6 +137,22 @@ var invalidCollectionsString string = `
 				"id": "sample-id"
 			}
 		]
+	},
+	{
+		"info": {
+			"name": "some-name"
+		},
+		"item": [
+			{
+				"name": "sample-item",
+				"id": "sample-id",
+				"request": {
+					"method": "GET",
+					"url": "https://some-url.com"
+				}
+			}
+		],
+		"variable":[{}]
 	},
 	{
 		"info": {

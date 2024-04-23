@@ -27,7 +27,11 @@ var validUrlsString string = `
   {
     "raw": "https://some-url.some-domain.com?some-param-key=some-param-value",
     "protocol": "https",
-    "host": "some-url.some-domain.com",
+    "host": "some-url.some-domain.com"
+  },
+  {
+    "raw": "https://some-url.some-domain.com?some-param-key=some-param-value",
+    "protocol": "https",
     "query": [
       {
         "key": "some-param-key",
@@ -39,11 +43,10 @@ var validUrlsString string = `
   {
     "raw": "https://some-url.some-domain.com?some-param-key=some-param-value",
     "protocol": "https",
-    "query": [
+    "variable": [
       {
-        "key": "some-param-key",
-        "value": "some-param-value",
-        "disabled": true
+        "key": "some-var-key",
+        "value": "some-var-value"
       }
     ]
   }
@@ -62,10 +65,16 @@ func TestUrl_valid(t *testing.T) {
 		if validUrls.Host != nil {
 			testutil.FatalIfNotEquals("some-url.some-domain.com", hostString, t)
 		}
-		testutil.FatalIfFalse("query paraments length is one", len(validUrls.Query) == 1, t)
-		testutil.FatalIfNotEquals("some-param-key", validUrls.Query[0].getKey(), t)
-		testutil.FatalIfNotEquals("some-param-value", validUrls.Query[0].getValue(), t)
-		testutil.FatalIfFalse("disabled", validUrls.Query[0].Disabled, t)
+		for _, q := range validUrls.Query {
+			testutil.FatalIfNotEquals("some-param-key", q.GetKey(), t)
+			testutil.FatalIfNotEquals("some-param-value", q.GetValue(), t)
+			testutil.FatalIfFalse("disabled", q.IsDisabled(), t)
+		}
+		for _, v := range validUrls.Variable {
+			testutil.FatalIfNotEquals("some-var-key", v.GetKey(), t)
+			testutil.FatalIfNotEquals("some-var-value", v.GetValue(), t)
+			testutil.FatalIfTrue("disabled", v.IsDisabled(), t)
+		}
 	}
 }
 
@@ -86,6 +95,14 @@ var invalidUrlsString string = `
         "key" : "some-param-key",
         "value": "some-param-value"
       },
+      {}
+    ]
+  },
+  {
+    "raw": "https://some-url.some-domain.com?some-param-key=some-param-value",
+    "protocol": "https",
+    "host": "some-url.some-domain.com",
+    "variable": [
       {}
     ]
   }

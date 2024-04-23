@@ -16,13 +16,13 @@ type Body struct {
 
 func (b *Body) InitAndValidate() error {
 	if b.Mode == "" {
-		return fmt.Errorf("body mode is mandatory")
+		return fmt.Errorf("mode is mandatory")
 	}
 	switch b.Mode {
 	case RAW:
 		return nil
 	default:
-		return fmt.Errorf("body mode \"%s\" is invalid/unsupported", b.Mode)
+		return fmt.Errorf("mode \"%s\" is invalid/unsupported", b.Mode)
 	}
 }
 

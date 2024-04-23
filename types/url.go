@@ -11,17 +11,18 @@ type Url struct {
 	Host       interface{}  `json:"host"` // host is oneOf string || []string
 	Port       string       `json:"port"`
 	Query      []QueryParam `json:"query"`
+	Variable   []Variable   `json:"variable"`
 	hostString string
 }
 
 func (u *Url) InitAndValidate() error {
 	// raw might not be mandatory as per schema
 	if u.Raw == "" {
-		return fmt.Errorf("url raw is mandatory")
+		return fmt.Errorf("raw is mandatory")
 	}
 	hostString, err := u.GetHost()
 	if err != nil {
-		return fmt.Errorf("url host has error: %s", err)
+		return fmt.Errorf("host has error: %s", err)
 	}
 	// set the determined hostString for later use
 	u.hostString = hostString
@@ -29,7 +30,15 @@ func (u *Url) InitAndValidate() error {
 	if len(u.Query) > 0 {
 		for i := range u.Query {
 			if err := u.Query[i].InitAndValidate(); err != nil {
-				return fmt.Errorf("url query at %d has error: %s", i+1, err)
+				return fmt.Errorf("query at %d has error: %s", i+1, err)
+			}
+		}
+	}
+
+	if len(u.Variable) > 0 {
+		for i := range u.Variable {
+			if err := u.Variable[i].InitAndValidate(); err != nil {
+				return fmt.Errorf("variable at %d has error: %s", i+1, err)
 			}
 		}
 	}
@@ -71,15 +80,19 @@ type QueryParam struct {
 
 func (qp *QueryParam) InitAndValidate() error {
 	if qp.Key == "" {
-		return fmt.Errorf("query parameter key is mandatory")
+		return fmt.Errorf("key is mandatory")
 	}
 	return nil
 }
 
-func (qp *QueryParam) getKey() string {
+func (qp *QueryParam) GetKey() string {
 	return qp.Key
 }
 
-func (qp *QueryParam) getValue() string {
+func (qp *QueryParam) GetValue() string {
 	return qp.Value
+}
+
+func (qp *QueryParam) IsDisabled() bool {
+	return qp.Disabled
 }

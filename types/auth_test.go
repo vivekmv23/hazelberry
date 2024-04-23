@@ -29,8 +29,8 @@ func TestAuth_valid(t *testing.T) {
 	testutil.Decode(validAuthString, &validAuth, t)
 	err := validAuth.InitAndValidate()
 	testutil.FatalIfError(err, t)
-	testutil.FatalIfNotEquals(validAuth.getId(), "some-username", t)
-	testutil.FatalIfNotEquals(validAuth.getPass(), "some-password", t)
+	testutil.FatalIfNotEquals(validAuth.GetId(), "some-username", t)
+	testutil.FatalIfNotEquals(validAuth.GetPass(), "some-password", t)
 }
 
 const invalidAuthListString string = `
