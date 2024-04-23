@@ -8,7 +8,7 @@ type Info struct {
 
 func (inf *Info) InitAndValidate() error {
 	if inf.Name == "" {
-		return fmt.Errorf("info name is mandatory")
+		return fmt.Errorf("name is mandatory")
 	}
 	return nil
 }

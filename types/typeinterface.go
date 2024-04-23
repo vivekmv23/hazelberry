@@ -6,6 +6,7 @@ type Type interface {
 }
 
 type KeyValue interface {
-	getKey() string
-	getValue() string
+	GetKey() string
+	GetValue() string
+	IsDisabled() bool
 }

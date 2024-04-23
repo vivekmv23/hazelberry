@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-func ConvertParsedUrl(r *Request) error {
+func convertParsedUrl(r *Request) error {
 	switch r.UrlParsed.(type) {
 	case string:
 		r.Url = Url{Raw: r.UrlParsed.(string)}
@@ -19,4 +19,11 @@ func ConvertParsedUrl(r *Request) error {
 		}
 		return nil
 	}
+}
+
+func checkAndValidate(tp Type) error {
+	if tp.IsEmpty() {
+		return nil
+	}
+	return tp.InitAndValidate()
 }

@@ -21,8 +21,9 @@ func TestHeaderAttr_valid(t *testing.T) {
 	testutil.Decode(validHeaderString, &validHeader, t)
 	err := validHeader.InitAndValidate()
 	testutil.FatalIfError(err, t)
-	testutil.FatalIfNotEquals(validHeader.getKey(), "Content-Type", t)
-	testutil.FatalIfNotEquals(validHeader.getValue(), "application/json", t)
+	testutil.FatalIfNotEquals(validHeader.GetKey(), "Content-Type", t)
+	testutil.FatalIfNotEquals(validHeader.GetValue(), "application/json", t)
+	testutil.FatalIfTrue("disabled", validHeader.IsDisabled(), t)
 }
 
 const invalidHeaderAttrsString string = `

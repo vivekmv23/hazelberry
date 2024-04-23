@@ -137,5 +137,5 @@ func TestRequest_urlParserError(t *testing.T) {
 	req := Request{
 		UrlParsed: make(chan int),
 	}
-	testutil.FatalIfNoError(ConvertParsedUrl(&req), t)
+	testutil.FatalIfNoError(convertParsedUrl(&req), t)
 }

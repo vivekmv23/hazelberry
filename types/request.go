@@ -28,26 +28,26 @@ type Request struct {
 func (r *Request) InitAndValidate() error {
 
 	if err := checkAndValidateUrl(r); err != nil {
-		return fmt.Errorf("request url has error: %s", err)
+		return fmt.Errorf("url has error: %s", err)
 	}
 
 	if err := checkAndValidateMethod(r.Method); err != nil {
-		return fmt.Errorf("request method has error: %s", err)
+		return fmt.Errorf("method has error: %s", err)
 	}
 
 	if err := checkAndValidate(&r.Auth); err != nil {
-		return fmt.Errorf("request auth has error: %s", err)
+		return fmt.Errorf("auth has error: %s", err)
 	}
 
 	if err := checkAndValidate(&r.Body); err != nil {
-		return fmt.Errorf("request body has error: %s", err)
+		return fmt.Errorf("body has error: %s", err)
 
 	}
 
 	if len(r.Header) > 0 {
 		for i := range r.Header {
 			if err := r.Header[i].InitAndValidate(); err != nil {
-				return fmt.Errorf("request header at %d has error: %s", i+1, err)
+				return fmt.Errorf("header at %d has error: %s", i+1, err)
 			}
 		}
 	}
@@ -59,18 +59,11 @@ func (r *Request) IsEmpty() bool {
 	return r.Method == ""
 }
 
-func checkAndValidate(tp Type) error {
-	if tp.IsEmpty() {
-		return nil
-	}
-	return tp.InitAndValidate()
-}
-
 func checkAndValidateUrl(r *Request) error {
 	if r.UrlParsed == nil {
 		return fmt.Errorf("url is mandatory")
 	}
-	if err := ConvertParsedUrl(r); err != nil {
+	if err := convertParsedUrl(r); err != nil {
 		return err
 	}
 	return checkAndValidate(&r.Url)

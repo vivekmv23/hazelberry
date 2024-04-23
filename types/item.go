@@ -3,21 +3,31 @@ package types
 import "fmt"
 
 type Item struct {
-	Id      string  `json:"id"`
-	Name    string  `json:"name"`
-	Request Request `json:"request"` // not supportiing request of type string
+	Id       string     `json:"id"`
+	Name     string     `json:"name"`
+	Request  Request    `json:"request"` // not supportiing request of type string
+	Variable []Variable `json:"variable"`
 }
 
-func (i *Item) InitAndValidate() error {
-	if i.Name == "" {
-		return fmt.Errorf("item name is mandatory")
+func (itm *Item) InitAndValidate() error {
+	if itm.Name == "" {
+		return fmt.Errorf("name is mandatory")
 	}
-	if i.Request.IsEmpty() {
-		return fmt.Errorf("item request is mandatory")
+	if itm.Request.IsEmpty() {
+		return fmt.Errorf("request is mandatory")
 	}
-	if err := i.Request.InitAndValidate(); err != nil {
-		return fmt.Errorf("item requests has error: %s", err)
+	if err := itm.Request.InitAndValidate(); err != nil {
+		return fmt.Errorf("requests has error: %s", err)
 	}
+
+	if len(itm.Variable) > 0 {
+		for i := range itm.Variable {
+			if err := itm.Variable[i].InitAndValidate(); err != nil {
+				return fmt.Errorf("variable at %d has error: %s", i+1, err)
+			}
+		}
+	}
+
 	return nil
 
 }
