@@ -23,3 +23,67 @@ Command line utility for testing REST APIs and organizing them leveraging [colle
 - Events
 - Request of type string
 - Item Group
+
+## Command Guidelines
+1. There are hazelberry commands and REPL commands
+2. Each command MAY support flags
+3. Supported formats of flags SHOULD be : 
+    ```sh
+    --flag value
+    -flag value
+    --flag=value
+    -f value
+    -fvalue
+    ```
+4. All comands SHOULD support help
+5. Help SHOULD print command, usage, and flags with their defaults
+
+## Commands
+
+```sh
+## Default behaviour is to load a "default" collection
+## User MAY use the env variable HZ_DEFAULT_COLLECTION_PATH to change this default
+## default HZ_DEFAULT_COLLECTION_PATH = ~/hazelberry/default-collection.json
+~ $ hazelberry
+default>
+```
+
+### `load`
+```sh
+## Loads a collection from specified path
+~ $ hazelberry load path/to/my-collection.json
+my-collection>
+```
+
+### `exit`
+```sh
+## Exits out of the REPL
+~ $ hazelberry
+default> exit
+~ $
+```
+
+### `ls`
+```sh
+## Lists all the items in a collection
+~ $ hazelberry
+default> ls
+Selection   Item                Method      Url
+1           my-get-request      GET         https://my-host.com/some/resources/id
+default>
+```
+### `invoke`
+```sh
+## Invokes the selected item by selection id or name
+~ $ hazelberry
+default> invoke 1
+HTTP response 200:OK
+{
+    "ack": true
+}
+default> invoke my-get-request
+HTTP response 200:OK
+{
+    "ack": true
+}
+```
